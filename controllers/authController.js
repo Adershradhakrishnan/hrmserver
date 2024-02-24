@@ -30,7 +30,7 @@ exports.login = async function(req,res){
                             {expiresIn: "10d"}
                         );
                         let response = success_function({
-                            status:200,
+                            statusCode:200,
                             data:access_token,
                             message: "Login successful"
                         });
@@ -39,7 +39,7 @@ exports.login = async function(req,res){
                         return;
                     } else{
                         let response = error_function({
-                            status:401,
+                            statusCode:401,
                             message: "invalid credentials"
                         });
                         res.status(response.statusCode).send(response);
@@ -48,7 +48,7 @@ exports.login = async function(req,res){
                 });
             }else{
                 let response = error_function({
-                    status:401,
+                    statusCode:401,
                     message: "invalid credentials"
                 });
                 res.status(response.statusCode).send(response);
@@ -58,7 +58,7 @@ exports.login = async function(req,res){
         }else{
             if(!email){
                 let response=error_function({
-                    status:422,
+                    statusCode:422,
                     message: "email is required"
                 });
                 res.status(response.statusCode).send(response);
@@ -67,7 +67,7 @@ exports.login = async function(req,res){
 
             if(!password){
                 let response=success_function({
-                    status422,
+                    statusCode:422,
                     message: "password required"
                 });
                 res.status(response.statusCode).send(response);
@@ -77,7 +77,7 @@ exports.login = async function(req,res){
     } catch(error) {
         if (process.env.NODE_ENV == "production") {
             let response = error_function({
-                status:400,
+                statusCode:400,
                 message: error
                     ? error.message
                         ? error.message
