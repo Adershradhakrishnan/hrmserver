@@ -1,6 +1,6 @@
 let success_function=require('../utils/response-handler').success_function;
 let error_function=require('../utils/response-handler').error_function;
-
+const users =require('../db/user');
 
 
 
@@ -70,8 +70,26 @@ exports.login = async function(req,res){
                     status422,
                     message: "password required"
                 });
-                res
+                res.status(response.statusCode).send(response);
+                return;
             }
         }
+    } catch(error) {
+        if (process.env.NODE_ENV == "production") {
+            let response = error_function({
+                status:400,
+                message: error
+                    ? error.message
+                        ? error.message
+                        : error
+                :"something went wrong",        
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        }else{
+            let response=error_function({status:400,message:error});
+            res.status(response.statusCode).send(response);
+            return;
+        }
     }
-}
+};
