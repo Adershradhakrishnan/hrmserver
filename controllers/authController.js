@@ -1,6 +1,10 @@
 let success_function=require('../utils/response-handler').success_function;
 let error_function=require('../utils/response-handler').error_function;
-const users =require('../db/user');
+const users =require('../db/models/users');
+let jwt = require('jsonwebtoken');
+let bcrypt =require('bcryptjs');
+let dotenv =require('dotenv');
+dotenv.config();
 
 
 
@@ -22,19 +26,23 @@ exports.login = async function(req,res){
             }
 
             if(user){
-                bcrypt.compare(password,user.password,async (error,auth)=>{
+
+                let db_password=user.password;
+                console.log("db_password: ",db_password);
+
+                bcrypt.compare(password,db_password,(err,auth)=>{
                     if(auth === true) {
                         let access_token = jwt.sign(
                             {user_id : user_id},
                             process.env.PRIVATE_KEY,
-                            {expiresIn: "10d"}
+                            {expiresIn: "1d"}
                         );
                         let response = success_function({
                             statusCode:200,
                             data:access_token,
                             message: "Login successful"
                         });
-                        response.user_type = user_type;
+                    
                         res.status(response.statusCode).send(response);
                         return;
                     } else{

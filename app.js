@@ -1,12 +1,23 @@
 
-require("dotenv").config();
-const express = require('express')
-const app = express()
 const dotenv =require('dotenv');
 dotenv.config();
+const express = require('express');
+const app = express();
+const cors =require("cors");
+const authRoutes = require('./routes/authroutes');
+const connect = require("./db/models/config");
+dotenv.config();
 
-const authRoutes = require('./routes/authroutes')
+connect();
+
+const corsOptions = {
+  origin: 'http://localhost:5173'
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
+
 app.use(authRoutes);
 
 
@@ -19,5 +30,5 @@ console.log("__dirname: ",__dirname);
 app.use('/',express.static(__dirname + "/hrm_client"));
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`server listening at http://localhost:${process.env.PORT}`);
 })
