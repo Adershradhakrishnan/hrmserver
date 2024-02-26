@@ -29,6 +29,6 @@ app.use(authRoutes);
 console.log("__dirname: ",__dirname);
 app.use('/',express.static(__dirname + "/hrm_client"));
 
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
   console.log(`server listening at http://localhost:${process.env.PORT}`);
 })

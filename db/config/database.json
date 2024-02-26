@@ -21,7 +21,7 @@
   },
   "production": {
     "database": {
-      "url" :"mongodb://localhost:27017/hrm" ,
+      "url" :"mongodb://localhost:27017/hrm",
       "protocol": "mongodb",
       "username": "root",
       "password": "password",
