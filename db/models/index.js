@@ -3,10 +3,11 @@ const path = require('path');
 const Mongoose = require('mongoose');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../../config/database.json')[env];
+const config = require(__dirname + '/../config/database.json')[env];
 
 if (config.database.url) {
   Mongoose.connect(config.database.url, config.database.options);
+  console.log("Reached here in config file...");
 } else if (config.database.config.dbName) {
   Mongoose.connect(`${config.database.protocol}://${config.database.username}:${config.database.password}@${config.database.host}:${config.database.port}`, config.database.options);
 } else {

@@ -18,21 +18,21 @@ module.exports = {
           ])
         },
             
-
+  
  down: (models, mongoose) => {
 
-     return models.users
-   .deleteMany({
-    _id:{
-      $in: [
-        "65d9bb622af666718a1b38f9",
-      ],
-    },
+  return models.users
+.deleteMany({
+ _id:{
+   $in: [
+     "65d9bb622af666718a1b38f9",
+   ],
+ },
 
-    
-  })
-  .then((res)=>{
-    console.log(res.deletedCount);
-  });
-  }
- };
+ 
+})
+.then((res)=>{
+ console.log(res.deletedCount);
+});
+}
+};

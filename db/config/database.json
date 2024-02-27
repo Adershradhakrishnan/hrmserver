@@ -1,27 +1,22 @@
-
-
 {
   "development": {
     "database": {
-      "url": "mongodb://localhost:27017/hrm",
+      "url": "mongodb://127.0.0.1/hrm",
       "options": {
         "useNewUrlParser": true
-      
       }
     }
   },
   "test": {
     "database": {
-      "url": "mongodb://localhost:27017/hrm",
+      "url": "mongodb://localhost/mongoose_test",
       "options": {
         "useNewUrlParser": true
-        
       }
     }
   },
   "production": {
     "database": {
-      "url" :"mongodb://localhost:27017/hrm",
       "protocol": "mongodb",
       "username": "root",
       "password": "password",
@@ -30,7 +25,6 @@
       "port": "",
       "options": {
         "useNewUrlParser": true
-        
       }
     }
   }
