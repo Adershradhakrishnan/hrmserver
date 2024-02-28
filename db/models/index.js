@@ -22,8 +22,8 @@ const db = () => {
     .filter(file => {
       return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
     })
-    .forEach(file => {
-      const model = require(path.resolve(__dirname, file))(Mongoose);
+    .forEach( file => {
+      const model =  require(path.resolve(__dirname, file))(Mongoose);
       m[model.modelName] = model;
     });
 

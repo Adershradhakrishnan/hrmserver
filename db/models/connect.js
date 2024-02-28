@@ -6,7 +6,8 @@ const MONGODB_NAME = process.env.MONGODB_NAME;
 
 async function connect(){
     try {
-        await mongoose.createConnection(`${MONGODB_URI}/${MONGODB_NAME}`);
+        mongoose.Promise = global.Promise;
+        await mongoose.connect(`${MONGODB_URI}/${MONGODB_NAME}`);
         console.log("Database connection established...");
         
     } catch (error) {

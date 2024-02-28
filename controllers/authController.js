@@ -11,13 +11,18 @@ dotenv.config();
 exports.login = async function(req,res){
 
     try{
+        
         let email = req.body.email;
+        console.log("email: ",email);
         let password = req.body.password;
+        console.log("password: ",password);
 
         if (email&&password){
-            let user = await users.findOne({
-                $and : [{email:email }],
-            })
+
+            console.log("reached here..");
+            let user = await users.findOne({email});
+
+            console.log("user: ",user);
 
             if(!user){
                 let response = error_function({"status" :400,"message" : "Invalid email"});
