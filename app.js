@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const cors =require("cors");
 const authRoutes = require('./routes/authroutes');
+const userRoutes = require('./routes/userroutes');
 const connect = require("./db/models/connect");
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(authRoutes);
+
+app.use(userRoutes);
 
 
 
