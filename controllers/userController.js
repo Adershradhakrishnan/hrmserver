@@ -18,7 +18,7 @@ exports.adduser = async function(req,res){
         const isUserExist = await users.findOne({email});
         console.log("isUserExist: ",isUserExist);
 
-        if(!isUserExist){
+        if(isUserExist){
             let response = error_function({
                 statusCode:400,
                 message: ('User already exists')
@@ -49,7 +49,7 @@ exports.adduser = async function(req,res){
             password
         }
 
-        if(!new_user){
+        if(new_user){
             let response = success_function({
                 statusCode:201,
                 data:new_user,
