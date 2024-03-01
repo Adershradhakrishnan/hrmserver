@@ -25,7 +25,7 @@ exports.login = async function(req,res){
             console.log("user: ",user);
 
             if(!user){
-                let response = error_function({"status" :400,"message" : "Invalid email"});
+                let response = error_function({"statusCode" :400,"message" : "Invalid email"});
                 res.status(response.statusCode).send(response);
                 return;
             }
@@ -87,6 +87,7 @@ exports.login = async function(req,res){
             }
         }
     } catch(error) {
+        console.log("Node_env : ",process.env.NODE_ENV);
         if (process.env.NODE_ENV == "production") {
             let response = error_function({
                 statusCode:400,
@@ -99,7 +100,7 @@ exports.login = async function(req,res){
             res.status(response.statusCode).send(response);
             return;
         }else{
-            let response=error_function({status:400,message:error});
+            let response=error_function({statusCode:400,message:error});
             res.status(response.statusCode).send(response);
             return;
         }

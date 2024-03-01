@@ -9,7 +9,7 @@
   },
   "test": {
     "database": {
-      "url": "mongodb://localhost/mongoose_test",
+      "url": "mongodb://localhost/hrm",
       "options": {
         "useNewUrlParser": true
       }
@@ -17,6 +17,7 @@
   },
   "production": {
     "database": {
+      "url":"mongodb://localhost/hrm",
       "protocol": "mongodb",
       "username": "root",
       "password": "password",
