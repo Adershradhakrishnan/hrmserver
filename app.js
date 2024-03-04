@@ -22,6 +22,7 @@ app.use(express.json());
 app.use(authRoutes);
 
 app.use(userRoutes);
+app.use('/getuser',userRoutes);
 
 
 
