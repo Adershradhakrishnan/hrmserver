@@ -5,6 +5,7 @@ const checkLogin=require('../utils/checklogin').checkLogin;
 
 router.post('/adduser',userController.adduser);//add
 router.get('/getuser',userController.getuser);//get
-router.get('/:userId',userController.router)
+router.get('/:userId',userController.router);
+router.put('/:userId',userController.Updateuser);
 
 module.exports=router;
