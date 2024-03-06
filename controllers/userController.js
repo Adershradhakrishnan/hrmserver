@@ -4,6 +4,7 @@ const users=require('../db/models/users');
 const mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
 const {response} =require('express');
+const validateadduser=require('../validations/adduser_validation');
 
 exports.adduser = async function(req,res){
 
@@ -15,55 +16,92 @@ exports.adduser = async function(req,res){
         const pincode = req.body.pincode;
         const password = req.body.password;
 
-        const isUserExist = await users.findOne({email});
-        console.log("isUserExist: ",isUserExist);
+        console.log(req.body);
 
-        if(isUserExist){
-            let response = error_function({
-                statusCode:400,
-                message: ('User already exists')
-            });
-            res.status(response.statusCode).send(response.message);
-            return;
+        const{validationerrors,validation_isValid} = await validateadduser(req.body);
+
+        console.log("validationerrors: ",validationerrors);
+        console.log("validation_isValid: ",validation_isValid);
+
+
+        if( !validation_isValid) {
+           let response = error_function({
+            statusCode:400,
+            message: ('validation error')
+           });
+           response.errors = validationerrors;
+           res.status(response.statusCode).send(response);
+           return;
+        } else{
+            if(phonenumber.length !==10){
+                let response = error_function({
+                    statusCode:400,
+                    message: ('phonenumber contain 10 digits')
+                });
+                res.status(response.statusCode).send(response);
+                return;
+            }
+                if(pincode.length !==6) {
+                    let response = error_function({
+                        statusCode:400,
+                        message: ('pincode contain 6 digit')
+                    });
+                    res.status(response.statusCode).send(response);
+                    return;
+                }
+                const isUserExist = await users.findOne({email});
+                console.log("isUserExist: ",isUserExist);
+        
+                if(isUserExist){
+                    let response = error_function({
+                        statusCode:400,
+                        message: ('User already exists')
+                    });
+                    res.status(response.statusCode).send(response.message);
+                    return;
+                }
+        
+                let salt = await bcrypt.genSalt(10);
+                console.log("salt: ",salt);
+        
+                let hashed_password = bcrypt.hashSync(password,salt);
+                console.log("hashed_password: ",hashed_password);
+        
+                const new_user = await users.create({
+                    name,
+                    email,
+                    phonenumber,
+                    pincode,
+                    password : hashed_password
+        
+                });
+                let response_obj = {
+                    name,
+                    email,
+                    phonenumber,
+                    pincode,
+                    password
+                }
+        
+                if(new_user){
+                    let response = success_function({
+                        statusCode:201,
+                        data:new_user,
+                        message: "success"
+                    });
+                    res.status(response.statusCode).send(response);
+                    
+                }else {
+                    response = error_function({
+                        statusCode: 400,
+                        message: "failed"
+                    });
+                    res.status(response.statusCode).send(response);
+                }
         }
+        
 
-        let salt = await bcrypt.genSalt(10);
-        console.log("salt: ",salt);
-
-        let hashed_password = bcrypt.hashSync(password,salt);
-        console.log("hashed_password: ",hashed_password);
-
-        const new_user = await users.create({
-            name,
-            email,
-            phonenumber,
-            pincode,
-            password : hashed_password
-
-        });
-        let response_obj = {
-            name,
-            email,
-            phonenumber,
-            pincode,
-            password
-        }
-
-        if(new_user){
-            let response = success_function({
-                statusCode:201,
-                data:new_user,
-                message: "success"
-            });
-            res.status(response.statusCode).send(response);
-            
-        }else {
-            response = error_function({
-                statusCode: 400,
-                message: "failed"
-            });
-            res.status(response.statusCode).send(response);
-        }
+     
     } catch (error) {
         let response = error_function({
             statusCode :400,

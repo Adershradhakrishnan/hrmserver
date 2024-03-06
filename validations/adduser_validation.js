@@ -13,7 +13,7 @@ module.exports=async function validateadduser(data){
     data.password=!isEmpty(data.password)?data.password:"";
 
     if(validator.isEmpty(data.name)){
-        errors.name("Name is required")
+        errors.name_empty("Name is required")
     }
 
     if(!validator.isAlpha(data.name)){
@@ -25,7 +25,7 @@ module.exports=async function validateadduser(data){
     }
 
     if(validator.isEmpty(data.email)){
-        errors.email("Email is required")
+        errors.email_empty("Email is required")
     }
 
     if(!validator.isEmail(data.email)){
@@ -45,11 +45,19 @@ module.exports=async function validateadduser(data){
     }
 
     if(validator.isEmpty(data.pincode)){
-        errors.pincode("Pincode is required")
+        errors.pincode_empty("Pincode is required")
+    }
+   if(!validator.isNumeric(data.pincode)){
+    errors.pincode("Invalid pincode")
+   }
+   if(validator.isEmpty(data.password)){
+    errors.password_empty("password is required")
+   }
+
+   return{
+      validationerrors: errors,
+      validation_isValid : isEmpty(errors),
     }
 
-    return errors;
-
     
-
 }
