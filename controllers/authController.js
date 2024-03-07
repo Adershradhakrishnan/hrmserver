@@ -4,6 +4,8 @@ const users =require('../db/models/users');
 let jwt = require('jsonwebtoken');
 let bcrypt =require('bcryptjs');
 let dotenv =require('dotenv');
+const validator = require("validator");
+const isEmpty = require('../validations/isEmpty');
 dotenv.config();
 
 
@@ -17,10 +19,51 @@ exports.login = async function(req,res){
         let password = req.body.password;
         console.log("password: ",password);
 
-        if (email&&password){
+        async function ValidateLogin(data) {
+            let errors = {};
+
+            data.email = !isEmpty(data.email) ? data.email : "";
+            data.password = !isEmpty(data.password) ? data.password : "";
+            console.log(data.email)
+
+            if (validator.isEmpty(data.email)) {
+                errors.email_empty = "Email is required";
+            }
+
+            if(!validator.isEmail(data.email)) {
+                errors.email = "Email is Invalid";
+            }
+
+            if (validator.isEmpty(data.password)) {
+                errors.password_empty = "password is required";
+            }
+
+            return {
+                userValid: isEmpty(errors),
+                usererrors: errors,
+            };
+        }
+
+        const { userValid, usererrors } = await ValidateLogin(req.body);
+
+        console.log("userValid: ",userValid);
+        console.log("usererrors: ",usererrors);
+
+        if (!userValid) {
+            let response = error_function({
+                statusCode: 400,
+                message: "validation error",
+                errors: usererrors,
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        } else {
+            if (email && password){
 
             console.log("reached here..");
-            let user = await users.findOne({email});
+            let user = await users.findOne({
+                email: email
+            });
 
             console.log("user: ",user);
 
@@ -86,6 +129,7 @@ exports.login = async function(req,res){
                 return;
             }
         }
+    }
     } catch(error) {
         console.log("Node_env : ",process.env.NODE_ENV);
         if (process.env.NODE_ENV == "production") {

@@ -3,40 +3,36 @@ const error_function=require('../utils/response-handler').error_function;
 const users=require('../db/models/users');
 const mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
-const {response} =require('express');
+const express =require('express');
 const validateadduser=require('../validations/adduser_validation');
 
 exports.adduser = async function(req,res){
 
     try{
 
-        const name = req.body.name;
-        const email = req.body.email;
-        const phonenumber = req.body.phonenumber;
-        const pincode = req.body.pincode;
-        const password = req.body.password;
+        const {name, email, phonenumber, pincode, password} = req.body;
 
         console.log(req.body);
 
-        const{validationerrors,validation_isValid} = await validateadduser(req.body);
+        const{usererrors,userValid} = await validateadduser(req.body);
 
-        console.log("validationerrors: ",validationerrors);
-        console.log("validation_isValid: ",validation_isValid);
+        console.log("usererrors: ",usererrors);
+        console.log("userValid: ",userValid);
 
 
-        if( !validation_isValid) {
+        if(!userValid) {
            let response = error_function({
             statusCode:400,
-            message: ('validation error')
+            message:"validation error"
            });
-           response.errors = validationerrors;
+           response.errors = usererrors;
            res.status(response.statusCode).send(response);
            return;
         } else{
-            if(phonenumber.length !==10){
+            if(phonenumber.length !== 10){
                 let response = error_function({
                     statusCode:400,
-                    message: ('phonenumber contain 10 digits')
+                    message: 'phonenumber should be 10 digits.'
                 });
                 res.status(response.statusCode).send(response);
                 return;
@@ -44,7 +40,7 @@ exports.adduser = async function(req,res){
                 if(pincode.length !==6) {
                     let response = error_function({
                         statusCode:400,
-                        message: ('pincode contain 6 digit')
+                        message: 'pincode should be 6 digits.'
                     });
                     res.status(response.statusCode).send(response);
                     return;
@@ -55,7 +51,7 @@ exports.adduser = async function(req,res){
                 if(isUserExist){
                     let response = error_function({
                         statusCode:400,
-                        message: ('User already exists')
+                        message: 'User already exists'
                     });
                     res.status(response.statusCode).send(response.message);
                     return;
@@ -87,14 +83,14 @@ exports.adduser = async function(req,res){
                     let response = success_function({
                         statusCode:201,
                         data:new_user,
-                        message: "success"
+                        message: 'User created successfully'
                     });
                     res.status(response.statusCode).send(response);
                     
                 }else {
-                    response = error_function({
+                   let response = error_function({
                         statusCode: 400,
-                        message: "failed"
+                        message: 'failed to create user'
                     });
                     res.status(response.statusCode).send(response);
                 }
@@ -105,7 +101,7 @@ exports.adduser = async function(req,res){
     } catch (error) {
         let response = error_function({
             statusCode :400,
-            message: "user creation failed"
+            message: 'user creation failed'
         });
         res.status(response.statusCode).send(response);
     }

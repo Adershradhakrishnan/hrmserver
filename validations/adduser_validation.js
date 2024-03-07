@@ -13,23 +13,23 @@ module.exports=async function validateadduser(data){
     data.password=!isEmpty(data.password)?data.password:"";
 
     if(validator.isEmpty(data.name)){
-        errors.name_empty("Name is required")
+        errors.name_empty="Name is required"
     }
 
     if(!validator.isAlpha(data.name)){
-        errors.name("Name can only have alphabets")
+        errors.name="Name can only have alphabets"
     }
 
     if(!validator.isLength(data.name,{min:6,max:30})){
-        errors.name("name must be between 6 and 30")
+        errors.name="name must be between 6 and 30"
     }
 
     if(validator.isEmpty(data.email)){
-        errors.email_empty("Email is required")
+        errors.email_empty="Email is required"
     }
 
     if(!validator.isEmail(data.email)){
-        errors.email("Email is invalid")
+        errors.email="Email is invalid"
     }
 
     let email_count = await adduser.countDocuments({
@@ -37,26 +37,29 @@ module.exports=async function validateadduser(data){
     })
 
     if(Number(email_count)>0){
-        errors.email("email must be unique")
+        errors.email="email must be unique"
+    }
+    if(validator.isEmpty(data.phonenumber)){
+        errors.phonenumber_empty="phonenumber required"
     }
 
     if(!validator.isNumeric(data.phonenumber)){
-        errors.phonenumber("Invalid phonenumber")
+        errors.phonenumber="Invalid phonenumber"
     }
 
     if(validator.isEmpty(data.pincode)){
-        errors.pincode_empty("Pincode is required")
+        errors.pincode_empty="Pincode is required"
     }
    if(!validator.isNumeric(data.pincode)){
-    errors.pincode("Invalid pincode")
+    errors.pincode="pincode invalid"
    }
    if(validator.isEmpty(data.password)){
-    errors.password_empty("password is required")
+    errors.password_empty="password is required"
    }
 
    return{
-      validationerrors: errors,
-      validation_isValid : isEmpty(errors),
+      usererrors: errors,
+      userValid : isEmpty(errors),
     }
 
     
