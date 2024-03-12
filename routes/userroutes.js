@@ -10,8 +10,8 @@ const setAccessControl = (access_type)=>{
     }
 };
 
-router.post('/adduser',userController.adduser);//add
-router.get('/getuser',userController.getuser);//get
+router.post('/adduser',setAccessControl('1'),userController.adduser);//add
+router.get('/getuser',setAccessControl('1'),userController.getuser);//get
 router.get('/:userId',userController.router);
 router.put('/:userId',userController.Updateuser);
 

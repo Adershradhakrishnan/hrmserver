@@ -72,7 +72,8 @@ exports.adduser = async function(req,res){
                     email,
                     phonenumber,
                     pincode,
-                    password : hashed_password
+                    password : hashed_password,
+                    user_type: user_type_id
         
                 });
                 let response_obj = {

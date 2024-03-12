@@ -2,10 +2,10 @@ const jwt = require("jsonwebtoken");
 const authController = require("../controllers/authController");
 const error_function = require("./response-handler").error_function;
 const control_data = require("./control_data.json");
-const user = require("../db/models/users");
+const users = require("../db/models/users");
 const user_types = require("../db/models/user_types");
 
-exports.accesscontrol = async function (access_types,req,res) {
+exports.accesscontrol = async function (access_types,req,res,next) {
     try{
 
         if(access_types =="*") {
@@ -36,28 +36,37 @@ exports.accesscontrol = async function (access_types,req,res) {
                             let allowed=access_types.split(",")
                             .map((obj)=>control_data[obj]);
 
-                            let user_type_id=(await user.findOne({_id:decoded.users_id})).user_type;
+                            console.log("allowed",allowed);
+                            console.log("decoded: ",decoded);
+
+                            console.log("token from access_control",decoded.user_id)
+
+                            let user_type_id=(await users.findOne({_id:decoded.user_id})).user_type;
+                            console.log("user_type_id: ",user_type_id);
+
                             let user_type=(await user_types.findOne({_id:user_type_id})).user_type;
+                            console.log("user_type: ",user_type);
 
-                            if(allowed&&allowed.include(user_type)){
+                            if(allowed&&allowed.includes(user_type)){
 
-                                let revoked= await authController.checkRevoked(req,res)
+                                // let revoked= await authController.checkRevoked(req,res)
 
-                                if(revoked==false){
-                                    next()
-                                }else if(revoked==true){
-                                    let response=error_function({
-                                        statusCode:401,
-                                        message:"Revoked Access Token"
-                                    })
-                                    res.status(401).send(response);
-                                }else{
-                                    let response=error_function({
-                                        statusCode:400,
-                                        message:"something went wrong"
-                                    })
-                                    res.status(400).send(response);
-                                }
+                                // if(revoked==false){
+                                //     next()
+                                // }else if(revoked==true){
+                                //     let response=error_function({
+                                //         statusCode:401,
+                                //         message:"Revoked Access Token"
+                                //     })
+                                //     res.status(401).send(response);
+                                // }else{
+                                //     let response=error_function({
+                                //         statusCode:400,
+                                //         message:"something went wrong"
+                                //     })
+                                //     res.status(400).send(response);
+                                // }
+                                next();
                             }else{
                                 let response=error_function({
                                     statusCode:403,

@@ -10,6 +10,6 @@ const setAccessControl = (access_type)=>{
 };
 
 
-router.post('/login',authController.login);
+router.post('/login',setAccessControl('*'),authController.login);
 
 module.exports = router;
