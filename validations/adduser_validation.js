@@ -60,7 +60,7 @@ module.exports=async function validateadduser(data){
    return{
       usererrors: errors,
       userValid : isEmpty(errors),
-    }
+    };
 
     
 }

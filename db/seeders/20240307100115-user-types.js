@@ -11,7 +11,7 @@ module.exports = {
       {
         _id: "65e99895550c5c1f798ca45c",
         user_type: "employee"
-      },
+      }
     ])
   },
 
@@ -20,9 +20,9 @@ module.exports = {
 
     .deleteMany({
       _id:{
-        $in: [
+        $in:[
           "65e9987a550c5c1f798ca45b",
-          "65e99895550c5c1f798ca45c",
+          "65e99895550c5c1f798ca45c"
         ],
       },
     })

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const user_types = require("./user_types");
 const users=new mongoose.Schema(
     {
        

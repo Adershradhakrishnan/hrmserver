@@ -29,6 +29,10 @@ exports.adduser = async function(req,res){
            res.status(response.statusCode).send(response);
            return;
         } else{
+
+            let user_type_id="65e99895550c5c1f798ca45c"
+            console.log(user_type_id);
+            
             if(phonenumber.length !== 10){
                 let response = error_function({
                     statusCode:400,
