@@ -60,6 +60,7 @@ exports.adduser = async function(req,res){
                     res.status(response.statusCode).send(response.message);
                     return;
                 }
+                
         
                 let salt = await bcrypt.genSalt(10);
                 console.log("salt: ",salt);
