@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const bcrypt=require('bcryptjs');
 const express =require('express');
 const validateadduser=require('../validations/adduser_validation');
+const sendEmail = require('../utils/sendemail').sendEmail;
+const set_password = require('../utils/set-password').setpassword;
 
 exports.adduser = async function(req,res){
 
@@ -60,6 +62,22 @@ exports.adduser = async function(req,res){
                     res.status(response.statusCode).send(response.message);
                     return;
                 }
+
+                //generate random password
+
+                function generateRandomPassword(length) {
+                    let charset =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$";
+                    let password = "";
+                    for (var i=0;i<length;i++) {
+                        var randomIndex = Math.floor(Math.random() * charset.length);
+                        password += charset.charAt(randomIndex);
+                    }
+                    return password;
+                }
+
+                var randomPassword = generateRandomPassword(12);
+                console.log("Random password:",randomPassword);
                 
         
                 let salt = await bcrypt.genSalt(10);
