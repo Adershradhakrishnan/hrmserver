@@ -104,6 +104,10 @@ exports.adduser = async function(req,res){
                 }
         
                 if(new_user){
+                    let email_template = await set_password(name,email,randomPassword);
+                    await sendEmail(email, "password",email_template); 
+                    console.log("Email send...");
+
                     let response = success_function({
                         statusCode:201,
                         data:new_user,

@@ -5,7 +5,7 @@ exports.setpassword = function (name,email,randompassword){
             
             <html lang="en" style="box-sizing: border-box;">
             <head>
-             meta charset="UTF-8">
+             <meta charset="UTF-8">
              <meta name="viewport" content="width=device-width, initial-scale=1.0">
              <title>password</title>
              <style>
