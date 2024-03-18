@@ -11,5 +11,6 @@ const setAccessControl = (access_type)=>{
 
 
 router.post('/login',setAccessControl('*'),authController.login);
+router.post('/forgot-password',setAccessControl('*'),authController.forgotPasswordController);
 
 module.exports = router;
