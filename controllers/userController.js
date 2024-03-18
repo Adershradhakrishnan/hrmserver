@@ -137,13 +137,25 @@ exports.adduser = async function(req,res){
 
 exports.getuser = async function (req,res) {
     try{
-        const allUsers = await users.find();
+
+        const page = parseInt(req.query.page) || 1; //current page,default to 1
+        const limit = parseInt(req.query.limit) || 5; //items per page,default to 10
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const allUsers = await users.find().skip(startIndex).limit(limit);
+        const totalUsers = await users.countDocuments();
+         
+        //const allUsers = await users.find();
         if (allUsers && allUsers.length > 0){
 
             const response = {
                 statusCode:200,
                 message: "success",
-                data: allUsers
+                data: allUsers,
+                currentPage: page,
+                totalPages: Math.ceil(totalUsers / limit)
             };
             res.status(200).send(response);
         }else {
