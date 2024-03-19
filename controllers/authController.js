@@ -179,7 +179,7 @@ exports.forgotPasswordController = async function(req,res) {
                     let reset_link = `${process.env.FRONTEND_URL}/reset-password?token=${reset_token}`;
 
                     let email_template = await resetpassword(users.name,reset_link);
-                    console.log("email_template: ",email_template);
+                    // console.log("email_template: ",email_template);
 
                     await sendEmail(email,"forgot password",email_template);
                     
