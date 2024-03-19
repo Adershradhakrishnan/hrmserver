@@ -8,6 +8,7 @@ const users=new mongoose.Schema(
         phonenumber:"string",
         pincode:"string",
         password:"string",
+        password_token: "string",
         
         user_type: { type: mongoose.Schema.Types.ObjectId, ref: "user_types" },
         

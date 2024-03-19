@@ -1,4 +1,4 @@
-exports.resetpassword = function (name,email,url){
+exports.resetpassword = function (name,url){
     return new Promise(async(resolve,reject)=>{
         try{
             let template = `
@@ -51,7 +51,7 @@ exports.resetpassword = function (name,email,url){
              </div>
              <div class="content">
              <p>Name <strong>${name}</strong>,</p>
-             <p> Your email<strong>${email}</p>
+         
              <p class="password"><label>${url}</label></p>
              </div>
 
