@@ -317,3 +317,68 @@ exports.passwordResetController = async function (req, res) {
       }
     }
    };
+
+   exports.changepassword = async function (req,res){
+     const {currentpassword, newpassword} = req.body;
+     const authHeader = req.headers["authorization"];
+
+     if(!authHeader){
+        let response = error_function({
+            statusCode: 401,
+            message: "Authorization header not received",
+        });
+        res.status(response.statusCode).send(response);
+        return;
+     }
+       try{
+        const token = authHeader.split(" ")[1];
+        const decodedToken = jwt.verify(token,process.env.PRIVATE_KEY);
+
+        const UserId = decodedToken.user_id;
+        // console.log("UserId:",UserId);
+
+        const user = await users.findById(UserId);
+        // console.log("user:",user);
+        if(!user){
+            let response = error_function({
+                statusCode:404,
+                message: "No such user"
+            });
+          res.status(response.statusCode).send(response);
+          return;
+        }
+
+        const currentpasswordvalid = await bcrypt.compare(currentpassword,user.password);
+        // console.log("currentpasswordvalid: ",currentpasswordvalid);
+        if(!currentpasswordvalid) {
+            let response = error_function({
+                statusCode:400,
+                message: "current password is incorrect"
+            });
+            res.status(response.statusCode).send(response);
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        console.log("salt: ",salt);
+        const hashedPassword = await bcrypt.hash(newpassword, salt);
+        console.log("hashedpassword:",hashedPassword);
+
+        await users.findByIdAndUpdate(UserId,{password: hashedPassword});
+
+        let response = success_function({
+            statusCode:200,
+            message: "password changed successfully"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+       } catch (error){
+        let response = error_function({
+            statusCode:500,
+            message: error.message || "Internal server error"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+       }
+     
+   }
