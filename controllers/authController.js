@@ -75,6 +75,13 @@ exports.login = async function(req,res){
                 return;
             }
 
+            let firstLogin = !user.lastLogin;
+
+            if (firstLogin) {
+                await users.updateOne({ email: email}, {$set: {lastLogin: new Date()}});
+
+            }
+
             if(user){
 
                 let db_password=user.password;
@@ -88,7 +95,12 @@ exports.login = async function(req,res){
                            
                          let response = success_function({
                             statusCode:200,
-                            data:access_token,
+                            data: {
+                                token: access_token,
+                                lastLogin:user.lastLogin,
+                                user_type:user.user_type,
+                            },
+                            
                             message: "Login successful"
                         });
                     
@@ -381,4 +393,4 @@ exports.passwordResetController = async function (req, res) {
         return;
        }
      
-   }
+   };

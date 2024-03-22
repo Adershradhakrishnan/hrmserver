@@ -128,7 +128,7 @@ exports.adduser = async function(req,res){
      
     } catch (error) {
         let response = error_function({
-            statusCode :400,
+            statusCode :500,
             message: 'user creation failed'
         });
         res.status(response.statusCode).send(response);
@@ -143,6 +143,19 @@ exports.getuser = async function (req,res) {
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
+
+        const keyword = req.query.keyword
+
+        let filter={};
+
+        if (keyword) {
+            filter = {
+                $or : [
+                    { "name": { $regex: keyword, $options: "i"} },
+                    { "email" : { $regex: keyword, $options: "i"} }
+                ]
+            };
+        }
 
         const allUsers = await users.find().skip(startIndex).limit(limit);
         const totalUsers = await users.countDocuments();

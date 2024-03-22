@@ -10,7 +10,7 @@ module.exports=async function validateadduser(data){
     data.email=!isEmpty(data.email)?data.email:"";
     data.phonenumber=!isEmpty(data.phonenumber)?data.phonenumber:"";
     data.pincode=!isEmpty(data.pincode)?data.pincode:"";
-    data.password=!isEmpty(data.password)?data.password:"";
+    // data.password=!isEmpty(data.password)?data.password:"";
 
     if(validator.isEmpty(data.name)){
         errors.name_empty="Name is required"
@@ -53,9 +53,9 @@ module.exports=async function validateadduser(data){
    if(!validator.isNumeric(data.pincode)){
     errors.pincode="pincode invalid"
    }
-   if(validator.isEmpty(data.password)){
-    errors.password_empty="password is required"
-   }
+//    if(validator.isEmpty(data.password)){
+//     errors.password_empty="password is required"
+//    }
 
    return{
       usererrors: errors,
