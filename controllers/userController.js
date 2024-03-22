@@ -157,8 +157,8 @@ exports.getuser = async function (req,res) {
             };
         }
 
-        const allUsers = await users.find().skip(startIndex).limit(limit);
-        const totalUsers = await users.countDocuments();
+        const allUsers = await users.find(filter).skip(startIndex).limit(limit);
+        const totalUsers = await users.countDocuments(filter);
          
         //const allUsers = await users.find();
         if (allUsers && allUsers.length > 0){
